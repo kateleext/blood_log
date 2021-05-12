@@ -43,14 +43,14 @@ class Records:
 def write_record(record):
     record_date = record.timestamp.date()
     record_time = record.timestamp.time()
-    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'a') as log:
+    with open('/Users/kate/Desktop/Hustle/coding/cs101/project/log.csv', 'a') as log:
         writer = csv.writer(log)
         writer.writerow([record_date, record_time, record.tag, record.mmol_level, record.mgdl_level])
         log.close()
 
 def retrieve_record(date):
     retrieved = []
-    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'r') as log:
+    with open('/Users/kate/Desktop/Hustle/coding/cs101/project/log.csv', 'r') as log:
         reader = csv.reader(log, delimiter = ",")
         for line in reader:
             if line[0] == date:
@@ -61,7 +61,7 @@ def retrieve_record(date):
 
 def two_week_average():
     retrieved = []
-    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'r') as log:
+    with open('/Users/kate/Desktop/Hustle/coding/cs101/project/log.csv', 'r') as log:
         reader = csv.reader(log, delimiter = ",")
         for line in reader:
             if datetime.strptime(line[0],"%Y-%m-%d") - datetime.now() <= timedelta(days=14):
@@ -72,7 +72,7 @@ def two_week_average():
         total += float(record[1])
         count += 1
         log.close()
-    print(total/count)
+    print("Your 2-week average: " + str(round(total/count, 2)) + " mmol/L")
         
     
 #Menu
@@ -92,7 +92,11 @@ def script():
         retrieve_record(read_date)
     elif action == 3:
         two_week_average()
-    
+    else:
+        print('Invalid input.')
+        sleep.sleep(1)
+        script()
+
     sleep.sleep(1)
 
     next_action = int(input('1. Return to menu    2. Close program \n'))

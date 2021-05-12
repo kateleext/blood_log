@@ -1,5 +1,8 @@
-from datetime import datetime, time, date
+from datetime import datetime, time, date, timedelta
 import csv
+import time as sleep
+
+row_csv = []
 
 class Records:
     evaluation = "None"
@@ -42,9 +45,11 @@ class Records:
 def write_record(record):
     record_date = record.timestamp.date()
     record_time = record.timestamp.time()
-    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'w') as log:
+    row_csv.append([record_date, record_time, record.tag, record.mmol_level, record.mgdl_level])
+    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'wb') as log:
         writer = csv.writer(log)
-        writer.writerow([record_date, record_time, record.tag, record.mmol_level, record.mgdl_level])
+        for row in row_csv:
+            writer.writerow(row)
         log.close()
 
 def retrieve_record(date):
@@ -56,25 +61,61 @@ def retrieve_record(date):
                 retrieved.append([line[2], line[3]])
         for record in retrieved:
             print(record[0] + "\t" + record[1])
+        log.close()
+
+def two_week_average():
+    retrieved = []
+    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'r') as log:
+        reader = csv.reader(log, delimiter = ",")
+        for line in reader:
+            if datetime.strptime(line[0],"%Y-%m-%d") - datetime.now() <= timedelta(days=14):
+                retrieved.append([line[2], line[3]])
+        count = 0
+    total = 0
+    for record in retrieved:
+        total += float(record[1])
+        count += 1
+        log.close()
+    print(total/count)
+        
     
+#Menu
+def script():
+    
+    print("Please select your action.")
+    action = int(input("1. New Record    2. Retrieve Record  3. 2-week Average \n"))
+    
+    if action == 1:
+        mgdl = float(input("Current Reading:  "))
+        new_record = Records(mgdl)
+        write_record(new_record)
+    elif action == 2:
+        x = str(input("Date in YYYYMMDD format:  "))
+        convert_date = datetime.strptime(x, '%Y%m%d')
+        read_date = convert_date.strftime('%Y-%m-%d')
+        retrieve_record(read_date)
+    elif action == 3:
+        two_week_average()
+    
+    sleep.sleep(1)
 
+    next_action = int(input('1. Return to menu    2. Close program \n'))
+    rerun(next_action)
 
-#Screen
-print("This is Yen's Blood Sugar Log. Please select your action.")
-print("1. New Record    2. Retrieve Record")
+#To return to screen
+def rerun(action):
+    if action == 1:
+        script()
+    elif action == 2:
+        exit()
+    else:
+        print('Invalid input.')
+        new_action = int(input('1. Return to menu    2. Close program \n'))
+        rerun(new_action)
 
-#Input
-action = input()
-if action == 1:
-    mgdl = float(input("Current Reading:"))
-    new_record = Records(mgdl)
-    write_record(new_record)
-elif action == 2:
-    x = str(input("Date in YYYYMMDD format:"))
-    convert_date = datetime.strptime(x, '%Y%m%d')
-    read_date = convert_date.strftime('%Y-%m-%d')
-    retrieve_record(read_date)
-
+#Actual Program Run
+print("This is Yen's Blood Sugar Log.")
+script()
 
 
 

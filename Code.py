@@ -66,7 +66,7 @@ def two_week_average():
         for line in reader:
             if datetime.strptime(line[0],"%Y-%m-%d") - datetime.now() <= timedelta(days=14):
                 retrieved.append([line[2], line[3]])
-        count = 0
+    count = 0
     total = 0
     for record in retrieved:
         total += float(record[1])

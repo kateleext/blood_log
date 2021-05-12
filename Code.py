@@ -22,8 +22,6 @@ class Records:
 
 print("This is Yen's Blood Sugar Log. Please enter your current reading.")
 
-mgdl_level = input()
+mgdl_level = float(input())
 new_record = Records(mgdl_level)
-print(Records.log)
-
 

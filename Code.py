@@ -2,8 +2,6 @@ from datetime import datetime, time, date, timedelta
 import csv
 import time as sleep
 
-row_csv = []
-
 class Records:
     evaluation = "None"
 
@@ -45,11 +43,9 @@ class Records:
 def write_record(record):
     record_date = record.timestamp.date()
     record_time = record.timestamp.time()
-    row_csv.append([record_date, record_time, record.tag, record.mmol_level, record.mgdl_level])
-    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'wb') as log:
+    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'a') as log:
         writer = csv.writer(log)
-        for row in row_csv:
-            writer.writerow(row)
+        writer.writerow([record_date, record_time, record.tag, record.mmol_level, record.mgdl_level])
         log.close()
 
 def retrieve_record(date):
@@ -116,9 +112,5 @@ def rerun(action):
 #Actual Program Run
 print("This is Yen's Blood Sugar Log.")
 script()
-
-
-
-
 
 

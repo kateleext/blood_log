@@ -36,13 +36,19 @@ class Records:
         print("mmol/L: {}".format(self.mmol_level))
         print(self.evaluation)
 
+print("This is Yen's Blood Sugar Log.")
+print("Please enter your current reading.")
 
-
-
-print("This is Yen's Blood Sugar Log. Please enter your current reading.")
+def write_record(record):
+    record_date = record.timestamp.date()
+    record_time = record.timestamp.time()
+    with open('/Users/kate/Desktop/Hustle/coding/CS101_Project/project/log.csv', 'w') as log:
+        writer = csv.writer(log)
+        writer.writerow([record_date, record_time, record.tag, record.mmol_level, record.mgdl_level])
+        log.close()
 
 mgdl_level = float(input())
 new_record = Records(mgdl_level)
-
+write_record(new_record)
 
 
